@@ -6,13 +6,13 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>hibernate-lms-application</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>hibernate-lms-application</name>
-	<description>Demo project for Spring Boot</description>
+	<description>A learning management application</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -38,14 +38,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-			<version>11.3.2</version>
+			<version>11.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
