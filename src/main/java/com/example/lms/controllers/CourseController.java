@@ -13,8 +13,11 @@ import java.util.Optional;
 @RequestMapping("/api/courses")
 public class CourseController {
 
-    @Autowired
     private CourseService courseService;
+
+    public CourseController(CourseService courseService) {
+        this.courseService = courseService;
+    }
 
     @GetMapping
     public List<CourseEntity> getAllCourses() {

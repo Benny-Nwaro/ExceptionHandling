@@ -3,7 +3,6 @@ package com.example.lms.services;
 
 import com.example.lms.entities.EnrollmentEntity;
 import com.example.lms.repositories.EnrollmentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +10,11 @@ import java.util.List;
 @Service
 public class EnrollmentService {
 
-    @Autowired
-    private EnrollmentRepository enrollmentRepository;
+    private final EnrollmentRepository enrollmentRepository;
+
+    public EnrollmentService(EnrollmentRepository enrollmentRepository) {
+        this.enrollmentRepository = enrollmentRepository;
+    }
 
     public List<EnrollmentEntity> getAllEnrollments() {
         return enrollmentRepository.findAll();

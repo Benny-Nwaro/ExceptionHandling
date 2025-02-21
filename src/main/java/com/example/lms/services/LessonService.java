@@ -3,7 +3,6 @@ package com.example.lms.services;
 
 import com.example.lms.entities.LessonEntity;
 import com.example.lms.repositories.LessonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +10,11 @@ import java.util.List;
 @Service
 public class LessonService {
 
-    @Autowired
-    private LessonRepository lessonRepository;
+    private final LessonRepository lessonRepository;
+
+    public LessonService(LessonRepository lessonRepository) {
+        this.lessonRepository = lessonRepository;
+    }
 
     public List<LessonEntity> getAllLessons() {
         return lessonRepository.findAll();

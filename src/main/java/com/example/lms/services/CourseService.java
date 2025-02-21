@@ -2,15 +2,18 @@ package com.example.lms.services;
 
 import com.example.lms.entities.CourseEntity;
 import com.example.lms.repositories.CourseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class CourseService {
 
-    @Autowired
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
+
+    public CourseService(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
+    }
 
     public List<CourseEntity> getAllCourses() {
         return courseRepository.findAll();

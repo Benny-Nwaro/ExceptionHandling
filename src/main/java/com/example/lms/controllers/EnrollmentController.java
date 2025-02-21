@@ -2,7 +2,6 @@ package com.example.lms.controllers;
 
 import com.example.lms.entities.EnrollmentEntity;
 import com.example.lms.services.EnrollmentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +12,11 @@ import java.util.Optional;
 @RequestMapping("/api/enrollments")
 public class EnrollmentController {
 
-    @Autowired
-    private EnrollmentService enrollmentService;
+    private final EnrollmentService enrollmentService;
+
+    public EnrollmentController(EnrollmentService enrollmentService) {
+        this.enrollmentService = enrollmentService;
+    }
 
     @GetMapping
     public List<EnrollmentEntity> getAllEnrollments() {

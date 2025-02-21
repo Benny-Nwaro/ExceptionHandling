@@ -2,7 +2,6 @@ package com.example.lms.controllers;
 
 import com.example.lms.entities.LessonEntity;
 import com.example.lms.services.LessonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +12,11 @@ import java.util.Optional;
 @RequestMapping("/api/lessons")
 public class LessonController {
 
-    @Autowired
-    private LessonService lessonService;
+    private final LessonService lessonService;
+
+    public LessonController(LessonService lessonService) {
+        this.lessonService = lessonService;
+    }
 
     @GetMapping
     public List<LessonEntity> getAllLessons() {

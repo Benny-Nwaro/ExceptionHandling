@@ -58,5 +58,5 @@ CREATE TABLE submissions (
   submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_submission_student FOREIGN KEY (student_id) REFERENCES users(user_id) ON DELETE CASCADE,
   CONSTRAINT fk_submission_assignment FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id) ON DELETE CASCADE,
-  UNIQUE (student_id, assignment_id) -- Prevents duplicate submissions by the same student
+  UNIQUE (student_id, assignment_id)
 );

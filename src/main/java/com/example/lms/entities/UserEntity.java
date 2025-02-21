@@ -1,6 +1,10 @@
 package com.example.lms.entities;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Entity
@@ -30,9 +34,9 @@ public class UserEntity {
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
@@ -47,7 +51,31 @@ public class UserEntity {
     private String profileBio;
 
     @Transient
-    private int age;  // Calculated field, not stored
+    private int age;
+
+
+    public UserEntity() {
+        this.createdAt = LocalDateTime.now();
+        LocalDate userAge = dateOfBirth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public UserEntity(Long id, String firstName, String lastName,
+                      String email, String password, String phoneNumber,
+                      Date dateOfBirth, Role role,
+                      Gender gender, String profileBio, int age) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.createdAt =  LocalDateTime.now();
+        this.role = role;
+        this.gender = gender;
+        this.profileBio = profileBio;
+        this.age = age;
+    }
 
     // Getters and Setters
     public Long getId() {
