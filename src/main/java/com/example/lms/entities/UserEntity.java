@@ -47,7 +47,7 @@ public class UserEntity {
     private String profileBio;
 
     @Transient
-    private int age;  // Calculated field, not stored
+    private int age;
 
     // Getters and Setters
     public Long getId() {
