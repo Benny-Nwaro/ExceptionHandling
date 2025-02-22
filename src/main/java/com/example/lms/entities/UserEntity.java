@@ -34,7 +34,6 @@ public class UserEntity {
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -56,7 +55,6 @@ public class UserEntity {
 
     public UserEntity() {
         this.createdAt = LocalDateTime.now();
-        LocalDate userAge = dateOfBirth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public UserEntity(Long id, String firstName, String lastName,
