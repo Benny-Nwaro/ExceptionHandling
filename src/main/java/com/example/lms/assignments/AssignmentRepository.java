@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AssignmentRepository extends JpaRepository<AssignmentEntity, Long> {
-
+    boolean existsByTitle(String title);
 }

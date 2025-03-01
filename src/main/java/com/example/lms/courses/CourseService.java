@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -16,18 +17,21 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public List<CourseEntity> getAllCourses() {
-        return courseRepository.findAll();
+    public List<CourseDTO> getAllCourses() {
+        List<CourseEntity> courses = courseRepository.findAll();
+        return courses.stream().map(CourseMapper::toDTO).collect(Collectors.toList());
     }
 
-    public CourseEntity getCourseById(Long id) {
-        return courseRepository.findById(id)
+    public CourseDTO getCourseById(Long id) {
+        CourseEntity course = courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException("Course with ID " + id + " does not exist"));
+        return CourseMapper.toDTO(course);
     }
 
-    public CourseEntity getCourseByTitle(String title) {
-        return courseRepository.findByTitle(title)
+    public CourseDTO getCourseByTitle(String title) {
+        CourseEntity course = courseRepository.findByTitle(title)
                 .orElseThrow(() -> new CourseNotFoundException("Course with title '" + title + "' does not exist"));
+        return CourseMapper.toDTO(course);
     }
 
     public CourseEntity saveCourse(CourseEntity course) {

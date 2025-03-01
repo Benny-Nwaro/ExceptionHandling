@@ -53,7 +53,7 @@ public class LessonEntity {
     public String toString() {
         return "Lesson{" +
                 "lessonId=" + lessonId +
-                ", course=" + (course != null ? course.getCourseId() : "null") +
+                ", course=" + (course.getCourseId()) +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", videoUrl='" + videoUrl + '\'' +

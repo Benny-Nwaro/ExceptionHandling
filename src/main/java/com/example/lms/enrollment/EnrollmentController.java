@@ -18,21 +18,21 @@ public class EnrollmentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EnrollmentEntity>> getAllEnrollments() {
-        List<EnrollmentEntity> enrollments = enrollmentService.getAllEnrollments();
+    public ResponseEntity<List<EnrollmentDTO>> getAllEnrollments() {
+        List<EnrollmentDTO> enrollments = enrollmentService.getAllEnrollments();
         return ResponseEntity.ok(enrollments);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EnrollmentEntity> getEnrollmentById(@PathVariable Long id) {
-        EnrollmentEntity enrollment = enrollmentService.getEnrollmentById(id);
+    public ResponseEntity<EnrollmentDTO> getEnrollmentById(@PathVariable Long id) {
+        EnrollmentDTO enrollment = enrollmentService.getEnrollmentById(id);
         return ResponseEntity.ok(enrollment);
     }
 
     @PostMapping
     public ResponseEntity<?> createEnrollment(@RequestBody EnrollmentEntity enrollment) {
         try {
-            EnrollmentEntity savedEnrollment = enrollmentService.enrollStudent(enrollment.getStudent().getId(),
+            EnrollmentDTO savedEnrollment = enrollmentService.enrollStudent(enrollment.getStudent().getId(),
                     enrollment.getCourse().getCourseId());
             return ResponseEntity.status(HttpStatus.CREATED).body(savedEnrollment);
         } catch (DuplicateEnrollmentException e) {

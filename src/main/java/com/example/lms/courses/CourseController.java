@@ -19,15 +19,15 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseEntity>> getAllCourses() {
-        List<CourseEntity> courses = courseService.getAllCourses();
+    public ResponseEntity<List<CourseDTO>> getAllCourses() {
+        List<CourseDTO> courses = courseService.getAllCourses();
         return ResponseEntity.ok(courses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseEntity> getCourseById(@PathVariable Long id) {
+    public ResponseEntity<CourseDTO> getCourseById(@PathVariable Long id) {
         try {
-            CourseEntity course = courseService.getCourseById(id);
+            CourseDTO course = courseService.getCourseById(id);
             return ResponseEntity.ok(course);
         } catch (CourseNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -35,8 +35,13 @@ public class CourseController {
     }
 
     @GetMapping("/title")
-    public ResponseEntity<CourseEntity> getCourseByTitle(@RequestParam String title) {
-        return ResponseEntity.ok(courseService.getCourseByTitle(title));
+    public ResponseEntity<CourseDTO> getCourseByTitle(@RequestParam String title) {
+        try {
+            CourseDTO course = courseService.getCourseByTitle(title);
+            return ResponseEntity.ok(course);
+        } catch (CourseNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @PostMapping

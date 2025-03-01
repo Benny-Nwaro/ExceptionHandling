@@ -1,4 +1,4 @@
-package com.example.lms.sumissions;
+package com.example.lms.submissions;
 
 import com.example.lms.assignments.AssignmentEntity;
 import com.example.lms.users.UserEntity;

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -15,13 +16,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        List<UserEntity> users =  userRepository.findAll();
+        return users.stream().map(UserMapper :: toDTO).collect(Collectors.toList());
     }
 
-    public UserEntity getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(
+    public UserDTO getUserById(Long id) {
+        UserEntity user = userRepository.findById(id).orElseThrow(
                 ()-> new ErrorResponse.NoSuchUserExistsException("User does not exist"));
+        return UserMapper.toDTO(user);
     }
 
     public UserEntity getUserByEmail(String email) {

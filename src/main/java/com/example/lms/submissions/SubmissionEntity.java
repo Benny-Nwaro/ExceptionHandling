@@ -1,9 +1,8 @@
-package com.example.lms.sumissions;
+package com.example.lms.submissions;
 
 import com.example.lms.assignments.AssignmentEntity;
 import com.example.lms.users.UserEntity;
 import jakarta.persistence.*;
-import org.hibernate.sql.ast.tree.update.Assignment;
 
 import java.time.LocalDateTime;
 

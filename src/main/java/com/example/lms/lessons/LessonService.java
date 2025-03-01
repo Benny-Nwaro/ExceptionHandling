@@ -1,38 +1,38 @@
 package com.example.lms.lessons;
 
-import com.example.lms.courses.CourseEntity;
-import com.example.lms.exceptions.LessonAlreadyExistsException;
+import com.example.lms.courses.CourseRepository;
 import com.example.lms.exceptions.LessonNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LessonService {
 
     private final LessonRepository lessonRepository;
+    private final CourseRepository courseRepository;
 
-    public LessonService(LessonRepository lessonRepository) {
+    public LessonService(LessonRepository lessonRepository, CourseRepository courseRepository) {
         this.lessonRepository = lessonRepository;
+        this.courseRepository = courseRepository;
     }
 
-    public List<LessonEntity> getAllLessons() {
-        return lessonRepository.findAll();
+    public List<LessonDTO> getAllLessons() {
+        List<LessonEntity> lessons = lessonRepository.findAll();
+        return lessons.stream().map(LessonMapper::toDTO).collect(Collectors.toList());
     }
 
-    public LessonEntity getLessonById(Long id) {
-        return lessonRepository.findById(id)
-                .orElseThrow(() -> new LessonNotFoundException("Lesson with ID " + id + " not found"));
+    public LessonDTO getLessonById(Long id) {
+       return lessonRepository.findById(id).map(LessonMapper::toDTO)
+               .orElseThrow(() -> new LessonNotFoundException("Lesson with ID " + id + " not found"));
     }
 
-    public LessonEntity createLesson(LessonEntity lesson) {
-        // Ensure unique title per course
-        Optional<LessonEntity> existingLesson = lessonRepository.findByCourseAndTitle(lesson.getCourse(), lesson.getTitle());
-        if (existingLesson.isPresent()) {
-            throw new LessonAlreadyExistsException("A lesson with the title '" + lesson.getTitle() + "' already exists in this course.");
-        }
-        return lessonRepository.save(lesson);
+    public LessonDTO createLesson(LessonDTO lessonDTO) {
+        LessonEntity lesson = LessonMapper.toEntity(lessonDTO);
+        lesson.setCourse(courseRepository.findById(lessonDTO.getCourseId())
+                .orElseThrow(() -> new RuntimeException("Course not found with ID: " + lessonDTO.getCourseId())));
+        return LessonMapper.toDTO(lessonRepository.save(lesson));
     }
 
     public void deleteLesson(Long id) {

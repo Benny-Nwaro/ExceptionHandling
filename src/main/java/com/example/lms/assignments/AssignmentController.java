@@ -17,16 +17,16 @@ public class AssignmentController {
     }
 
     @GetMapping
-    public List<AssignmentEntity> getAssignments(){
+    public List<AssignmentDTO> getAssignments(){
         return assignmentService.getAssignments();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<AssignmentEntity> getAssignmentById(@PathVariable Long id){
-        Optional<AssignmentEntity> assignment = Optional.ofNullable(assignmentService.getAssignmentById(id));
+    public ResponseEntity<AssignmentDTO> getAssignmentById(@PathVariable Long id){
+        Optional<AssignmentDTO> assignment = Optional.ofNullable(assignmentService.getAssignmentById(id));
         return assignment.map(ResponseEntity ::ok).orElseGet(()->ResponseEntity.notFound().build());
     }
     @PostMapping
-    public AssignmentEntity createAssignment(@RequestBody AssignmentEntity assignment){
+    public AssignmentDTO createAssignment(@RequestBody AssignmentDTO assignment){
         return assignmentService.saveAssignment(assignment);
     }
     @DeleteMapping("/{id}")

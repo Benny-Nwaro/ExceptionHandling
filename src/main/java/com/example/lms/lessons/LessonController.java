@@ -19,20 +19,20 @@ public class LessonController {
     }
 
     @GetMapping
-    public ResponseEntity<List<LessonEntity>> getAllLessons() {
+    public ResponseEntity<List<LessonDTO>> getAllLessons() {
         return ResponseEntity.ok(lessonService.getAllLessons());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LessonEntity> getLessonById(@PathVariable Long id) {
-        LessonEntity lesson = lessonService.getLessonById(id);
+    public ResponseEntity<LessonDTO> getLessonById(@PathVariable Long id) {
+        LessonDTO lesson = lessonService.getLessonById(id);
         return ResponseEntity.ok(lesson);
     }
 
     @PostMapping
-    public ResponseEntity<?> createLesson(@RequestBody LessonEntity lesson) {
+    public ResponseEntity<?> createLesson(@RequestBody LessonDTO lesson) {
         try {
-            LessonEntity createdLesson = lessonService.createLesson(lesson);
+            LessonDTO createdLesson = lessonService.createLesson(lesson);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdLesson);
         } catch (LessonAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());

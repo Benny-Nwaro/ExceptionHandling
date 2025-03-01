@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EnrollmentService {
@@ -23,16 +24,16 @@ public class EnrollmentService {
         this.courseRepository = courseRepository;
     }
 
-    public List<EnrollmentEntity> getAllEnrollments() {
-        return enrollmentRepository.findAll();
+    public List<EnrollmentDTO> getAllEnrollments() {
+        return enrollmentRepository.findAll().stream().map(EnrollmentMapper::toDTO).collect(Collectors.toList());
     }
 
-    public EnrollmentEntity getEnrollmentById(Long id) {
-        return enrollmentRepository.findById(id).orElseThrow(() ->
+    public EnrollmentDTO getEnrollmentById(Long id) {
+        return enrollmentRepository.findById(id).map(EnrollmentMapper::toDTO).orElseThrow(() ->
                 new EnrollmentNotFoundException("Enrollment with ID " + id + " not found"));
     }
 
-    public EnrollmentEntity enrollStudent(Long studentId, Long courseId) {
+    public EnrollmentDTO enrollStudent(Long studentId, Long courseId) {
         UserEntity student = userRepository.findById(studentId)
                 .orElseThrow(() -> new EnrollmentNotFoundException("Student with ID " + studentId + " not found"));
         CourseEntity course = courseRepository.findById(courseId)
@@ -46,7 +47,9 @@ public class EnrollmentService {
         }
 
         EnrollmentEntity enrollment = new EnrollmentEntity(null, student, course);
-        return enrollmentRepository.save(enrollment);
+        EnrollmentEntity savedEnrollment = enrollmentRepository.save(enrollment);
+
+        return new EnrollmentDTO(savedEnrollment.getEnrollmentId(), studentId, courseId);
     }
 
     public void deleteEnrollment(Long id) {
