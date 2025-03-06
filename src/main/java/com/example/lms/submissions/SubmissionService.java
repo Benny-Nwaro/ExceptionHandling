@@ -6,11 +6,12 @@ import com.example.lms.exceptions.DuplicateSubmissionException;
 import com.example.lms.exceptions.ResourceNotFoundException;
 import com.example.lms.users.UserEntity;
 import com.example.lms.users.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SubmissionService {
@@ -48,10 +49,15 @@ public class SubmissionService {
         return SubmissionMapper.toDTO(submission);
     }
 
-    public List<SubmissionDTO> getAllSubmissions() {
-        return submissionRepository.findAll().stream()
-                .map(SubmissionMapper::toDTO).collect(Collectors.toList());
+    public Page<SubmissionDTO> getAllSubmissions(int page, int size) {
+        if (page < 0) page = 0;
+        if (size <= 0) size = 10;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("submittedAt").descending());
+        Page<SubmissionEntity> submissions = submissionRepository.findAll(pageable);
+        return submissions.map(SubmissionMapper::toDTO);
     }
+
 
     public SubmissionDTO getSubmissionById(Long submissionId) {
         SubmissionEntity submission = submissionRepository.findById(submissionId)

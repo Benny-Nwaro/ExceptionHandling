@@ -39,7 +39,6 @@ public class EnrollmentService {
         CourseEntity course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new EnrollmentNotFoundException("Course with ID " + courseId + " not found"));
 
-        // Check if the student is already enrolled in the course
         Optional<EnrollmentEntity> existingEnrollment = enrollmentRepository.findByStudentAndCourse(student, course);
         if (existingEnrollment.isPresent()) {
             throw new DuplicateEnrollmentException("Student with ID " + studentId +

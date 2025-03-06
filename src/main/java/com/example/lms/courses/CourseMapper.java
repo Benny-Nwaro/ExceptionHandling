@@ -9,4 +9,13 @@ public class CourseMapper {
                 course.getInstructorId()
         );
     }
+
+    public static CourseEntity toEntity(CourseDTO courseDTO) {
+        return new CourseEntity(
+                null,
+                courseDTO.getTitle(),
+                courseDTO.getDescription(),
+                courseDTO.getInstructorId()
+        );
+    }
 }

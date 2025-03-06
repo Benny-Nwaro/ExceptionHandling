@@ -1,7 +1,6 @@
 package com.example.lms.lessons;
 
-import com.example.lms.exceptions.LessonAlreadyExistsException;
-import com.example.lms.exceptions.LessonNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/lessons")
+@RequestMapping("/api/v1/lessons")
 public class LessonController {
 
     private final LessonService lessonService;
@@ -25,27 +24,18 @@ public class LessonController {
 
     @GetMapping("/{id}")
     public ResponseEntity<LessonDTO> getLessonById(@PathVariable Long id) {
-        LessonDTO lesson = lessonService.getLessonById(id);
-        return ResponseEntity.ok(lesson);
+        return ResponseEntity.ok(lessonService.getLessonById(id));
     }
 
     @PostMapping
-    public ResponseEntity<?> createLesson(@RequestBody LessonDTO lesson) {
-        try {
-            LessonDTO createdLesson = lessonService.createLesson(lesson);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdLesson);
-        } catch (LessonAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+    public ResponseEntity<LessonDTO> createLesson(@RequestBody @Valid LessonDTO lesson) {
+        LessonDTO createdLesson = lessonService.createLesson(lesson);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdLesson);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteLesson(@PathVariable Long id) {
-        try {
-            lessonService.deleteLesson(id);
-            return ResponseEntity.noContent().build();
-        } catch (LessonNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<Void> deleteLesson(@PathVariable Long id) {
+        lessonService.deleteLesson(id);
+        return ResponseEntity.noContent().build();
     }
 }

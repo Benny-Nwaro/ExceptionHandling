@@ -10,5 +10,4 @@ public class HibernateLmsApplication {
 		SpringApplication.run(HibernateLmsApplication.class, args);
 
 	}
-
 }

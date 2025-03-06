@@ -7,7 +7,12 @@ public class UserMapper {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.getRole().toString()
+                user.getRole().toString(),
+                user.getProfileBio(),
+                user.getGender().name(),
+                user.getPhoneNumber(),
+                user.getDateOfBirth().toString(),
+                user.getPassword()
         );
     }
 }

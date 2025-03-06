@@ -56,13 +56,13 @@ CREATE TABLE users (
 --  CONSTRAINT fk_assignment_course FOREIGN KEY (course_id) REFERENCES courses(course_id) ON DELETE CASCADE
 --);
 
--- Submissions Table (Students submit assignments)
---CREATE TABLE submissions (
---  submission_id SERIAL PRIMARY KEY,
---  student_id INTEGER NOT NULL,
---  assignment_id INTEGER NOT NULL,
---  submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---  CONSTRAINT fk_submission_student FOREIGN KEY (student_id) REFERENCES users(user_id) ON DELETE CASCADE,
---  CONSTRAINT fk_submission_assignment FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id) ON DELETE CASCADE,
---  UNIQUE (student_id, assignment_id)
---);
+ Submissions Table (Students submit assignments)
+CREATE TABLE submissions (
+  submission_id SERIAL PRIMARY KEY,
+  student_id INTEGER NOT NULL,
+  assignment_id INTEGER NOT NULL,
+  submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_submission_student FOREIGN KEY (student_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  CONSTRAINT fk_submission_assignment FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id) ON DELETE CASCADE,
+  UNIQUE (student_id, assignment_id)
+);

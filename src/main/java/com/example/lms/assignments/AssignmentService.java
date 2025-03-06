@@ -46,8 +46,10 @@ public class AssignmentService {
         return AssignmentMapper.toDTO(assignment);
     }
 
-    public void deleteById(Long id){
-         assignmentRepository.deleteById(id);
+    public void deleteById(Long id) {
+        if (!assignmentRepository.existsById(id)) {
+            throw new AssignmentNotFoundException("Assignment with ID " + id + " not found");
+        }
+        assignmentRepository.deleteById(id);
     }
-
 }

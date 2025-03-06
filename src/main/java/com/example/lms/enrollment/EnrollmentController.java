@@ -1,14 +1,15 @@
 package com.example.lms.enrollment;
 
 import com.example.lms.exceptions.DuplicateEnrollmentException;
-import org.springframework.http.HttpStatus;
+import com.example.lms.exceptions.EnrollmentNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/enrollments")
+@RequestMapping("/api/v1/enrollments")
 public class EnrollmentController {
 
     private final EnrollmentService enrollmentService;
@@ -19,8 +20,7 @@ public class EnrollmentController {
 
     @GetMapping
     public ResponseEntity<List<EnrollmentDTO>> getAllEnrollments() {
-        List<EnrollmentDTO> enrollments = enrollmentService.getAllEnrollments();
-        return ResponseEntity.ok(enrollments);
+        return ResponseEntity.ok(enrollmentService.getAllEnrollments());
     }
 
     @GetMapping("/{id}")
@@ -30,16 +30,12 @@ public class EnrollmentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createEnrollment(@RequestBody EnrollmentEntity enrollment) {
-        try {
-            EnrollmentDTO savedEnrollment = enrollmentService.enrollStudent(enrollment.getStudent().getId(),
-                    enrollment.getCourse().getCourseId());
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedEnrollment);
-        } catch (DuplicateEnrollmentException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
-        }
+    public ResponseEntity<EnrollmentDTO> createEnrollment(@RequestBody @Valid EnrollmentDTO enrollmentDTO) {
+        EnrollmentDTO savedEnrollment = enrollmentService.enrollStudent(
+                enrollmentDTO.getStudentId(),
+                enrollmentDTO.getCourseId()
+        );
+        return ResponseEntity.status(201).body(savedEnrollment);
     }
 
     @DeleteMapping("/{id}")
