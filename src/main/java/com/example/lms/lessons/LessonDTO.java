@@ -1,15 +1,17 @@
 package com.example.lms.lessons;
 
+import java.util.UUID;
+
 public class LessonDTO {
-    private Long lessonId;
-    private Long courseId;
+    private UUID lessonId;
+    private UUID courseId;
     private String title;
     private String content;
     private String videoUrl;
 
     public LessonDTO() {}
 
-    public LessonDTO(Long lessonId, Long courseId, String title, String content, String videoUrl) {
+    public LessonDTO(UUID lessonId, UUID courseId, String title, String content, String videoUrl) {
         this.lessonId = lessonId;
         this.courseId = courseId;
         this.title = title;
@@ -17,11 +19,11 @@ public class LessonDTO {
         this.videoUrl = videoUrl;
     }
 
-    public Long getLessonId() { return lessonId; }
-    public void setLessonId(Long lessonId) { this.lessonId = lessonId; }
+    public UUID getLessonId() { return lessonId; }
+    public void setLessonId(UUID lessonId) { this.lessonId = lessonId; }
 
-    public Long getCourseId() { return courseId; }
-    public void setCourseId(Long courseId) { this.courseId = courseId; }
+    public UUID getCourseId() { return courseId; }
+    public void setCourseId(UUID courseId) { this.courseId = courseId; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

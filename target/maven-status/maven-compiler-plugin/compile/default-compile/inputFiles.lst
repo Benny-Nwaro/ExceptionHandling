@@ -6,6 +6,7 @@
 /Users/test/FlywayMigration/src/main/java/com/example/lms/assignments/AssignmentRepository.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/assignments/AssignmentService.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/auth/AuthController.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/auth/LoginRequest.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/courses/CourseController.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/courses/CourseDTO.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/courses/CourseEntity.java
@@ -38,6 +39,7 @@
 /Users/test/FlywayMigration/src/main/java/com/example/lms/lessons/LessonService.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/security/JwtAuthenticationFilter.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/security/JwtUtil.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/security/OpenApiConfig.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/security/SecurityConfig.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/submissions/SubmissionController.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/submissions/SubmissionDTO.java

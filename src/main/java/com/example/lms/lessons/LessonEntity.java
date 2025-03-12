@@ -4,13 +4,15 @@ package com.example.lms.lessons;
 import com.example.lms.courses.CourseEntity;
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "lessons")
 public class LessonEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long lessonId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID lessonId;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
@@ -26,7 +28,7 @@ public class LessonEntity {
 
     public LessonEntity() {}
 
-    public LessonEntity(Long lessonId, CourseEntity course, String title, String content, String videoUrl) {
+    public LessonEntity(UUID lessonId, CourseEntity course, String title, String content, String videoUrl) {
         this.lessonId = lessonId;
         this.course = course;
         this.title = title;
@@ -34,8 +36,8 @@ public class LessonEntity {
         this.videoUrl = videoUrl;
     }
 
-    public Long getLessonId() { return lessonId; }
-    public void setLessonId(Long lessonId) { this.lessonId = lessonId; }
+    public UUID getLessonId() { return lessonId; }
+    public void setLessonId(UUID lessonId) { this.lessonId = lessonId; }
 
     public CourseEntity getCourse() { return course; }
     public void setCourse(CourseEntity course) { this.course = course; }

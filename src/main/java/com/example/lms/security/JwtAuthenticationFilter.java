@@ -1,6 +1,7 @@
 package com.example.lms.security;
 
 import com.example.lms.users.UserService;
+import io.micrometer.common.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -27,8 +29,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void doFilterInternal(HttpServletRequest request,
+                                    @NonNull HttpServletResponse response, @NonNull FilterChain chain)
             throws ServletException, IOException {
+
+        String requestURI = request.getRequestURI();
+
+        // Skip JWT filter for public endpoints
+        if (requestURI.startsWith("/swagger-ui") ||
+                requestURI.startsWith("/v3/api-docs") ||
+                requestURI.equals("/swagger-ui.html")) {
+            logger.info("Skipping JWT filter for Swagger request: {}", requestURI);
+            chain.doFilter(request, response);
+            return;
+        }
 
         final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
@@ -65,4 +79,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         chain.doFilter(request, response);
     }
+
 }

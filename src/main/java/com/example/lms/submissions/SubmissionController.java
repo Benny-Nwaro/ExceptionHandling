@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/submissions")
 public class SubmissionController {
@@ -32,8 +34,17 @@ public class SubmissionController {
     }
 
     @GetMapping("/{submissionId}")
-    public ResponseEntity<SubmissionDTO> getSubmission(@PathVariable Long submissionId) {
+    public ResponseEntity<SubmissionDTO> getSubmission(@PathVariable UUID submissionId) {
         SubmissionDTO submission = submissionService.getSubmissionById(submissionId);
         return ResponseEntity.ok(submission);
     }
+
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<Page<SubmissionDTO>> getSubmissionsByStudentId(
+            @PathVariable UUID studentId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(submissionService.getSubmissionsByStudentId(studentId, page, size));
+    }
+
 }

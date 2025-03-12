@@ -1,1 +1,13 @@
 /Users/test/FlywayMigration/src/test/java/com/example/lms/HibernateLmsApplicationTests.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/controllers/AssignmentControllerTest.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/controllers/CourseControllerTest.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/controllers/EnrollmentControllerTest.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/controllers/LessonControllerTest.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/controllers/SubmissionControllerTest.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/controllers/UserControllerTest.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/services/AssignmentServiceTest.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/services/CourseServiceTest.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/services/EnrollmentServiceTest.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/services/LessonServiceTest.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/services/SubmissionServiceTest.java
+/Users/test/FlywayMigration/src/test/java/com/example/lms/services/UserServiceTest.java

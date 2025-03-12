@@ -13,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class SubmissionService {
 
@@ -59,8 +61,15 @@ public class SubmissionService {
     }
 
 
-    public SubmissionDTO getSubmissionById(Long submissionId) {
+    public SubmissionDTO getSubmissionById(UUID submissionId) {
         SubmissionEntity submission = submissionRepository.findById(submissionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Submission not found"));
         return SubmissionMapper.toDTO(submission);    }
+
+    public Page<SubmissionDTO> getSubmissionsByStudentId(UUID studentId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("submittedAt").descending());
+        Page<SubmissionEntity> submissions = submissionRepository.findByStudentId(studentId, pageable);
+        return submissions.map(SubmissionMapper::toDTO);
+    }
+
 }

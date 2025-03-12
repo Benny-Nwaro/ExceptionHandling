@@ -1,9 +1,11 @@
 package com.example.lms.users;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -21,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
@@ -31,8 +33,22 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getCurrentUser(@AuthenticationPrincipal UserEntity user) {
+        if (user == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(UserMapper.toDTO(user));
+    }
+
+    @GetMapping("/instructors")
+    public ResponseEntity<List<UserDTO>> getAllInstructors() {
+        List<UserDTO> instructors = userService.getAllInstructors();
+        return ResponseEntity.ok(instructors);
     }
 }

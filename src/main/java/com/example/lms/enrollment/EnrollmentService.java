@@ -1,15 +1,18 @@
 package com.example.lms.enrollment;
 
-import com.example.lms.exceptions.DuplicateEnrollmentException;
-import com.example.lms.exceptions.EnrollmentNotFoundException;
 import com.example.lms.courses.CourseEntity;
 import com.example.lms.courses.CourseRepository;
+import com.example.lms.exceptions.DuplicateEnrollmentException;
+import com.example.lms.exceptions.EnrollmentNotFoundException;
+import com.example.lms.users.UserDTO;
 import com.example.lms.users.UserEntity;
+import com.example.lms.users.UserMapper;
 import com.example.lms.users.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,12 +31,25 @@ public class EnrollmentService {
         return enrollmentRepository.findAll().stream().map(EnrollmentMapper::toDTO).collect(Collectors.toList());
     }
 
-    public EnrollmentDTO getEnrollmentById(Long id) {
+    public EnrollmentDTO getEnrollmentById(UUID id) {
         return enrollmentRepository.findById(id).map(EnrollmentMapper::toDTO).orElseThrow(() ->
                 new EnrollmentNotFoundException("Enrollment with ID " + id + " not found"));
     }
 
-    public EnrollmentDTO enrollStudent(Long studentId, Long courseId) {
+    public List<UserDTO> getUsersByCourseId(UUID courseId) {
+        return enrollmentRepository.findUsersByCourseId(courseId)
+                .stream()
+                .map(UserMapper::toDTO) // Convert UserEntity to UserDTO
+                .collect(Collectors.toList());
+    }
+    public List<UserDTO> getStudentsByInstructor(UUID instructorId) {
+        return enrollmentRepository.findStudentsByInstructorId(instructorId)
+                .stream()
+                .map(user ->  UserMapper.toDTO(user))  // Convert to DTO
+                .collect(Collectors.toList());
+    }
+
+    public EnrollmentDTO enrollStudent(UUID studentId, UUID courseId) {
         UserEntity student = userRepository.findById(studentId)
                 .orElseThrow(() -> new EnrollmentNotFoundException("Student with ID " + studentId + " not found"));
         CourseEntity course = courseRepository.findById(courseId)
@@ -51,7 +67,7 @@ public class EnrollmentService {
         return new EnrollmentDTO(savedEnrollment.getEnrollmentId(), studentId, courseId);
     }
 
-    public void deleteEnrollment(Long id) {
+    public void deleteEnrollment(UUID id) {
         EnrollmentEntity existingEnrollment = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new EnrollmentNotFoundException("Enrollment with ID " + id + " not found"));
 

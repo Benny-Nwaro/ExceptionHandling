@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,7 +31,7 @@ public class UserService implements UserDetailsService {
         return users.stream().map(UserMapper :: toDTO).collect(Collectors.toList());
     }
 
-    public UserDTO getUserById(Long id) {
+    public UserDTO getUserById(UUID id) {
         UserEntity user = userRepository.findById(id).orElseThrow(
                 ()-> new ErrorResponse.NoSuchUserExistsException("User does not exist"));
         return UserMapper.toDTO(user);
@@ -50,6 +51,13 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
 
+    public List<UserDTO> getAllInstructors() {
+        List<UserEntity> instructors = userRepository.findByRole(Role.INSTRUCTOR);
+        return instructors.stream()
+                .map(UserMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public UserDTO saveUser(UserEntity user) {
         Optional<UserEntity> existingUser = userRepository.findByEmail(user.getEmail());
 
@@ -63,7 +71,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public void deleteUser(Long id) {
+    public void deleteUser(UUID id) {
         UserEntity existingUser = userRepository.findById(id).orElseThrow(
                 () -> new ErrorResponse.NoSuchUserExistsException("User does not exist"));
         userRepository.deleteById(id);

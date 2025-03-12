@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/courses")
@@ -23,13 +24,18 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseDTO> getCourseById(@PathVariable Long id) {
+    public ResponseEntity<CourseDTO> getCourseById(@PathVariable UUID id) {
         return ResponseEntity.ok(courseService.getCourseById(id));
     }
 
     @GetMapping(params = "title")
     public ResponseEntity<CourseDTO> getCourseByTitle(@RequestParam String title) {
         return ResponseEntity.ok(courseService.getCourseByTitle(title));
+    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<CourseDTO>> getCoursesByUserId(@PathVariable("id") UUID userId) {
+        List<CourseDTO> courses = courseService.getCoursesByInstructorId(userId);
+        return ResponseEntity.ok(courses);
     }
 
     @PostMapping
@@ -38,8 +44,8 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
-        courseService.deleteCourse(id); // If not found, exception is handled globally
+    public ResponseEntity<Void> deleteCourse(@PathVariable UUID id) {
+        courseService.deleteCourse(id);
         return ResponseEntity.noContent().build();
     }
 }

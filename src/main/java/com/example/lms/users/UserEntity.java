@@ -7,17 +7,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 public class UserEntity implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "user_id", updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
 
     @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;
@@ -52,15 +54,20 @@ public class UserEntity implements UserDetails {
     @Column(name = "profile_bio", columnDefinition = "TEXT")
     private String profileBio;
 
+    @Version
+    @Column(name = "version")
+    private Long version;
+
     @Transient
     private int age;
 
 
     public UserEntity() {
         this.createdAt = LocalDateTime.now();
+        this.version = 0L;
     }
 
-    public UserEntity(Long id, String firstName, String lastName,
+    public UserEntity(UUID id, String firstName, String lastName,
                       String email, String password, String phoneNumber,
                       Date dateOfBirth, Role role,
                       Gender gender, String profileBio, int age) {
@@ -76,6 +83,7 @@ public class UserEntity implements UserDetails {
         this.gender = gender;
         this.profileBio = profileBio;
         this.age = age;
+        this.version = 0L;
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -113,11 +121,11 @@ public class UserEntity implements UserDetails {
     }
 
     // Getters and Setters
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -187,6 +195,14 @@ public class UserEntity implements UserDetails {
 
     public Role getRole() {
         return role;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     @Override

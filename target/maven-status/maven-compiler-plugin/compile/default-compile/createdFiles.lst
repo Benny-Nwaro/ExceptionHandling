@@ -1,6 +1,8 @@
 com/example/lms/enrollment/EnrollmentEntity.class
 com/example/lms/users/UserMapper.class
 com/example/lms/users/UserService.class
+com/example/lms/security/OpenApiConfig.class
+com/example/lms/auth/LoginRequest.class
 com/example/lms/auth/AuthController.class
 com/example/lms/submissions/SubmissionRepository.class
 com/example/lms/lessons/LessonEntity.class
@@ -40,6 +42,7 @@ com/example/lms/exceptions/CourseAlreadyExistsException.class
 com/example/lms/exceptions/ErrorResponse$NoSuchUserExistsException.class
 com/example/lms/exceptions/LessonNotFoundException.class
 com/example/lms/courses/CourseEntity.class
+com/example/lms/security/SecurityConfig$1.class
 com/example/lms/lessons/LessonDTO.class
 com/example/lms/enrollment/EnrollmentRepository.class
 com/example/lms/auth/AuthResponse.class

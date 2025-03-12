@@ -1,13 +1,15 @@
 package com.example.lms.courses;
 
+import java.util.UUID;
+
 public class CourseDTO {
-    private Long courseId;
+    private UUID courseId;
     private String title;
     private String description;
-    private Long instructorId;
+    private UUID instructorId;
 
     // Constructor
-    public CourseDTO(Long courseId, String title, String description, Long instructorId) {
+    public CourseDTO(UUID courseId, String title, String description, UUID instructorId) {
         this.courseId = courseId;
         this.title = title;
         this.description = description;
@@ -15,8 +17,8 @@ public class CourseDTO {
     }
 
     // Getters & Setters
-    public Long getCourseId() { return courseId; }
-    public void setCourseId(Long courseId) { this.courseId = courseId; }
+    public UUID getCourseId() { return courseId; }
+    public void setCourseId(UUID courseId) { this.courseId = courseId; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -24,7 +26,7 @@ public class CourseDTO {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public Long getInstructorId() { return instructorId; }
-    public void setInstructorId(Long instructorId) { this.instructorId = instructorId; }
+    public UUID getInstructorId() { return instructorId; }
+    public void setInstructorId(UUID instructorId) { this.instructorId = instructorId; }
 }
 

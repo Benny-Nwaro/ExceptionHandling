@@ -2,14 +2,15 @@ package com.example.lms.courses;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "courses")
 public class CourseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long courseId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID courseId;
 
     @Column(nullable = false, length = 100)
     private String title;
@@ -18,7 +19,7 @@ public class CourseEntity {
     private String description;
 
     @Column(nullable = false)
-    private Long instructorId;
+    private UUID instructorId;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -27,7 +28,7 @@ public class CourseEntity {
         this.createdAt = LocalDateTime.now();
     }
 
-    public CourseEntity(Long courseId, String title, String description, Long instructorId) {
+    public CourseEntity(UUID courseId, String title, String description, UUID instructorId) {
         this.courseId = courseId;
         this.title = title;
         this.description = description;
@@ -35,8 +36,8 @@ public class CourseEntity {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Long getCourseId() { return courseId; }
-    public void setCourseId(Long courseId) { this.courseId = courseId; }
+    public UUID getCourseId() { return courseId; }
+    public void setCourseId(UUID courseId) { this.courseId = courseId; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -44,8 +45,8 @@ public class CourseEntity {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public Long getInstructorId() { return instructorId; }
-    public void setInstructorId(Long instructorId) { this.instructorId = instructorId; }
+    public UUID getInstructorId() { return instructorId; }
+    public void setInstructorId(UUID instructorId) { this.instructorId = instructorId; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 

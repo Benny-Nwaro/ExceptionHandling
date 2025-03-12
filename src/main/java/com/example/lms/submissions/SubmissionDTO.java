@@ -1,43 +1,44 @@
 package com.example.lms.submissions;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class SubmissionDTO {
-    private Long submissionId;
-    private Long studentId;
-    private Long assignmentId;
+    private UUID submissionId;
+    private UUID studentId;
+    private UUID assignmentId;
     private LocalDateTime submittedAt;
 
     public SubmissionDTO() {}
 
-    public SubmissionDTO(Long submissionId, Long studentId, Long assignmentId, LocalDateTime submittedAt) {
+    public SubmissionDTO(UUID submissionId, UUID studentId, UUID assignmentId, LocalDateTime submittedAt) {
         this.submissionId = submissionId;
         this.studentId = studentId;
         this.assignmentId = assignmentId;
         this.submittedAt = submittedAt;
     }
 
-    public Long getSubmissionId() {
+    public UUID getSubmissionId() {
         return submissionId;
     }
 
-    public void setSubmissionId(Long submissionId) {
+    public void setSubmissionId(UUID submissionId) {
         this.submissionId = submissionId;
     }
 
-    public Long getStudentId() {
+    public UUID getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Long studentId) {
+    public void setStudentId(UUID studentId) {
         this.studentId = studentId;
     }
 
-    public Long getAssignmentId() {
+    public UUID getAssignmentId() {
         return assignmentId;
     }
 
-    public void setAssignmentId(Long assignmentId) {
+    public void setAssignmentId(UUID assignmentId) {
         this.assignmentId = assignmentId;
     }
 

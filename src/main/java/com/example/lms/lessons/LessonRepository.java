@@ -6,11 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface LessonRepository extends JpaRepository<LessonEntity, Long> {
-    List<LessonEntity> findByCourse_CourseId(Long courseId);
-    Boolean findByCourseAndTitle(CourseEntity course, String title);
+public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
+    List<LessonEntity> findByCourse_CourseId(UUID courseId);
+    Optional<LessonEntity> findByCourseAndTitle(CourseEntity course, String title);
 
 }
 

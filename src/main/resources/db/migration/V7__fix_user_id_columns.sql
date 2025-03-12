@@ -1,0 +1,18 @@
+-- Step 1: Drop the existing foreign key constraints
+ALTER TABLE enrollments DROP CONSTRAINT IF EXISTS fk_student;
+ALTER TABLE submissions DROP CONSTRAINT IF EXISTS fk_submission_student;
+
+-- Step 2: Drop the user_id column from enrollments and submissions
+ALTER TABLE enrollments DROP COLUMN IF EXISTS user_id;
+ALTER TABLE submissions DROP COLUMN IF EXISTS user_id;
+
+-- Step 3: Ensure student_id exists and is correctly typed
+ALTER TABLE enrollments ALTER COLUMN student_id SET NOT NULL;
+ALTER TABLE submissions ALTER COLUMN student_id SET NOT NULL;
+
+-- Step 4: Add new foreign key constraints on student_id referencing users(user_id)
+ALTER TABLE enrollments ADD CONSTRAINT fk_student
+FOREIGN KEY (student_id) REFERENCES users(user_id) ON DELETE CASCADE;
+
+ALTER TABLE submissions ADD CONSTRAINT fk_submission_student
+FOREIGN KEY (student_id) REFERENCES users(user_id) ON DELETE CASCADE;

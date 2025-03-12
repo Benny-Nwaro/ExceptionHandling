@@ -4,14 +4,15 @@ import com.example.lms.courses.CourseEntity;
 import com.example.lms.users.UserEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "enrollments")
 public class EnrollmentEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long enrollmentId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID enrollmentId;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
@@ -28,15 +29,15 @@ public class EnrollmentEntity {
         this.enrollmentDate = LocalDateTime.now();
     }
 
-    public EnrollmentEntity(Long enrollmentId, UserEntity student, CourseEntity course) {
+    public EnrollmentEntity(UUID enrollmentId, UserEntity student, CourseEntity course) {
         this.enrollmentId = enrollmentId;
         this.student = student;
         this.course = course;
         this.enrollmentDate = LocalDateTime.now();
     }
 
-    public Long getEnrollmentId() { return enrollmentId; }
-    public void setEnrollmentId(Long enrollmentId) { this.enrollmentId = enrollmentId; }
+    public UUID getEnrollmentId() { return enrollmentId; }
+    public void setEnrollmentId(UUID enrollmentId) { this.enrollmentId = enrollmentId; }
 
     public UserEntity getStudent() { return student; }
     public void setStudent(UserEntity student) { this.student = student; }

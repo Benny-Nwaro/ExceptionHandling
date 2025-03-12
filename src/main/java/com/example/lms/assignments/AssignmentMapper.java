@@ -16,7 +16,7 @@ public class AssignmentMapper {
 
     public static AssignmentEntity toEntity(AssignmentDTO dto, CourseEntity course) {
         return new AssignmentEntity(
-                dto.getAssignmentId() != null ? dto.getAssignmentId() : 0,
+                dto.getAssignmentId() != null ? dto.getAssignmentId() : null,
                 dto.getTitle(),
                 dto.getDescription(),
                 course,

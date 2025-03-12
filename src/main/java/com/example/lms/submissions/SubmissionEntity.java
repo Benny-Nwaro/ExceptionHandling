@@ -5,6 +5,7 @@ import com.example.lms.users.UserEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "submissions",
@@ -12,9 +13,9 @@ import java.time.LocalDateTime;
 public class SubmissionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "submission_id")
-    private Long submission_id;
+    private UUID submission_id;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
@@ -36,7 +37,7 @@ public class SubmissionEntity {
         this.submittedAt = LocalDateTime.now();
     }
 
-    public Long getId() { return submission_id; }
+    public UUID getId() { return submission_id; }
 
     public UserEntity getStudent() { return student; }
     public void setStudent(UserEntity student) { this.student = student; }
@@ -45,6 +46,18 @@ public class SubmissionEntity {
     public void setAssignment(AssignmentEntity assignment) { this.assignment = assignment; }
 
     public LocalDateTime getSubmittedAt() { return submittedAt; }
+
+    public UUID getSubmission_id() {
+        return submission_id;
+    }
+
+    public void setSubmission_id(UUID submission_id) {
+        this.submission_id = submission_id;
+    }
+
+    public void setSubmittedAt(LocalDateTime submittedAt) {
+        this.submittedAt = submittedAt;
+    }
 
     @Override
     public String toString() {

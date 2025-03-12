@@ -8,6 +8,7 @@ import com.example.lms.exceptions.DuplicateAssignmentException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +28,7 @@ public class AssignmentService {
                 .map(AssignmentMapper::toDTO).collect(Collectors.toList());
     };
 
-    public AssignmentDTO getAssignmentById(Long id){
+    public AssignmentDTO getAssignmentById(UUID id){
         AssignmentEntity assignment = assignmentRepository.findById(id)
                 .orElseThrow(() -> new AssignmentNotFoundException("Assignment with id " + id + " not found"));
         return AssignmentMapper.toDTO(assignment);
@@ -46,7 +47,7 @@ public class AssignmentService {
         return AssignmentMapper.toDTO(assignment);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         if (!assignmentRepository.existsById(id)) {
             throw new AssignmentNotFoundException("Assignment with ID " + id + " not found");
         }

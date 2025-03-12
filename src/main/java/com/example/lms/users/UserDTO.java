@@ -2,8 +2,10 @@ package com.example.lms.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.UUID;
+
 public class UserDTO {
-    private Long id;
+    private UUID id;
     private String firstName;
     private String lastName;
     private String email;
@@ -19,7 +21,7 @@ public class UserDTO {
     }
 
     // Constructor
-    public UserDTO(Long id, String firstName, String lastName, String email, String role,
+    public UserDTO(UUID id, String firstName, String lastName, String email, String role,
                    String profileBio, String gender, String phoneNumber, String dateOfBirth, String password) {
         this.id = id;
         this.firstName = firstName;
@@ -34,8 +36,8 @@ public class UserDTO {
     }
 
     // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/lessons")
@@ -23,7 +24,7 @@ public class LessonController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LessonDTO> getLessonById(@PathVariable Long id) {
+    public ResponseEntity<LessonDTO> getLessonById(@PathVariable UUID id) {
         return ResponseEntity.ok(lessonService.getLessonById(id));
     }
 
@@ -34,7 +35,7 @@ public class LessonController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLesson(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteLesson(@PathVariable UUID id) {
         lessonService.deleteLesson(id);
         return ResponseEntity.noContent().build();
     }

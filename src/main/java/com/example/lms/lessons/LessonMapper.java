@@ -1,5 +1,7 @@
 package com.example.lms.lessons;
 
+import com.example.lms.courses.CourseEntity;
+
 public class LessonMapper {
 
     public static LessonDTO toDTO(LessonEntity lesson) {
@@ -12,9 +14,13 @@ public class LessonMapper {
         );
     }
 
-    public static LessonEntity toEntity(LessonDTO lessonDTO) {
+    public static LessonEntity toEntity(LessonDTO lessonDTO, CourseEntity course) {
+        if (lessonDTO == null) {
+            throw new IllegalArgumentException("LessonDTO cannot be null");
+        }
         LessonEntity lesson = new LessonEntity();
         lesson.setLessonId(lessonDTO.getLessonId());
+        lesson.setCourse(course);
         lesson.setTitle(lessonDTO.getTitle());
         lesson.setContent(lessonDTO.getContent());
         lesson.setVideoUrl(lessonDTO.getVideoUrl());

@@ -2,23 +2,25 @@ package com.example.lms.submissions;
 
 import com.example.lms.assignments.AssignmentEntity;
 import com.example.lms.users.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface SubmissionRepository extends JpaRepository<SubmissionEntity, Long> {
+public interface SubmissionRepository extends JpaRepository<SubmissionEntity, UUID> {
 
-    // Find all submissions by a specific student
     List<SubmissionEntity> findByStudent(UserEntity student);
 
-    // Find all submissions for a specific assignment
     List<SubmissionEntity> findByAssignment(AssignmentEntity assignment);
 
-    // Check if a student has already submitted an assignment
     boolean existsByStudentAndAssignment(UserEntity student, AssignmentEntity assignment);
 
-    // Find a submission by student and assignment (if unique per student)
     SubmissionEntity findByStudentAndAssignment(UserEntity student, AssignmentEntity assignment);
+
+    Page<SubmissionEntity> findByStudentId(UUID studentId, Pageable pageable);
+
 }
