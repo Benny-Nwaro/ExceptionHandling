@@ -2,6 +2,7 @@ package com.example.lms.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class UserDTO {
@@ -11,18 +12,18 @@ public class UserDTO {
     private String email;
     private String role;
     private String profileBio;
-    private String gender;
+    private Gender gender;
     private String phoneNumber;
-    private String dateOfBirth;
+    private Date dateOfBirth;
+    private String profileImageUrl;
     @JsonIgnore
     private String password;
 
     public UserDTO() {
     }
 
-    // Constructor
     public UserDTO(UUID id, String firstName, String lastName, String email, String role,
-                   String profileBio, String gender, String phoneNumber, String dateOfBirth, String password) {
+                   String profileBio, Gender gender, String phoneNumber, Date dateOfBirth, String password) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,6 +33,21 @@ public class UserDTO {
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.dateOfBirth = dateOfBirth;
+        this.password = password;
+    }
+
+    public UserDTO(UUID id, String firstName, String lastName, String email, String role,
+                   String profileBio, Gender gender, String phoneNumber, Date dateOfBirth, String profileImageUrl,  String password) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+        this.profileBio = profileBio;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.profileImageUrl = profileImageUrl;
         this.password = password;
     }
 
@@ -58,11 +74,11 @@ public class UserDTO {
         this.profileBio = profileBio;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -74,12 +90,20 @@ public class UserDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     public String getPassword() {

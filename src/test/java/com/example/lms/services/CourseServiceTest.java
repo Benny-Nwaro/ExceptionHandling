@@ -3,14 +3,18 @@ package com.example.lms.services;
 import com.example.lms.courses.*;
 import com.example.lms.exceptions.CourseAlreadyExistsException;
 import com.example.lms.exceptions.CourseNotFoundException;
+import com.example.lms.users.UserRepository;
+import com.example.lms.utils.FileStorageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,118 +28,201 @@ class CourseServiceTest {
     @Mock
     private CourseRepository courseRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private FileStorageService fileStorageService;
+
     @InjectMocks
     private CourseService courseService;
 
-    private UUID courseId;
-    private UUID instructorId;
     private CourseEntity courseEntity;
     private CourseDTO courseDTO;
+    private UUID courseId;
 
     @BeforeEach
     void setUp() {
         courseId = UUID.randomUUID();
-        instructorId = UUID.randomUUID(); // Required field for CourseEntity
+        courseEntity = new CourseEntity();
+        courseEntity.setCourseId(courseId);
+        courseEntity.setTitle("Java Programming");
+        courseEntity.setDescription("Learn Java from scratch");
+        courseEntity.setInstructorId(UUID.randomUUID());
+        courseEntity.setCoursePrice(BigDecimal.valueOf(100.0));
+        courseEntity.setCourseImage("path/to/image.jpg");
 
-        courseEntity = new CourseEntity(courseId, "Java Basics", "Intro to Java", instructorId);
-        courseDTO = new CourseDTO(courseId, "Java Basics", "Intro to Java", instructorId);
+        courseDTO = CourseMapper.toDTO(courseEntity);
     }
 
     @Test
-    void shouldReturnAllCourses() {
+    void testGetAllCourses() {
         when(courseRepository.findAll()).thenReturn(List.of(courseEntity));
 
-        try (MockedStatic<CourseMapper> mockedMapper = mockStatic(CourseMapper.class)) {
-            mockedMapper.when(() -> CourseMapper.toDTO(courseEntity)).thenReturn(courseDTO);
+        List<CourseDTO> courses = courseService.getAllCourses();
 
-            List<CourseDTO> courses = courseService.getAllCourses();
-
-            assertEquals(1, courses.size());
-            assertEquals("Java Basics", courses.get(0).getTitle());
-            verify(courseRepository, times(1)).findAll();
-            mockedMapper.verify(() -> CourseMapper.toDTO(courseEntity), times(1)); // Verify mapper call
-        }
+        assertFalse(courses.isEmpty());
+        assertEquals(1, courses.size());
+        assertEquals("Java Programming", courses.get(0).getTitle());
+        verify(courseRepository, times(1)).findAll();
     }
 
     @Test
-    void shouldReturnCourseById() {
+    void testGetCourseById_Success() {
         when(courseRepository.findById(courseId)).thenReturn(Optional.of(courseEntity));
 
-        try (MockedStatic<CourseMapper> mockedMapper = mockStatic(CourseMapper.class)) {
-            mockedMapper.when(() -> CourseMapper.toDTO(courseEntity)).thenReturn(courseDTO);
+        CourseDTO result = courseService.getCourseById(courseId);
 
-            CourseDTO result = courseService.getCourseById(courseId);
-
-            assertNotNull(result);
-            assertEquals(courseId, result.getCourseId());
-            verify(courseRepository, times(1)).findById(courseId);
-            mockedMapper.verify(() -> CourseMapper.toDTO(courseEntity), times(1));
-        }
-    }
-
-    @Test
-    void shouldThrowExceptionIfCourseNotFoundById() {
-        when(courseRepository.findById(courseId)).thenReturn(Optional.empty());
-
-        assertThrows(CourseNotFoundException.class, () -> courseService.getCourseById(courseId));
+        assertNotNull(result);
+        assertEquals(courseId, result.getCourseId());
         verify(courseRepository, times(1)).findById(courseId);
     }
 
     @Test
-    void shouldReturnCourseByTitle() {
-        when(courseRepository.findByTitle("Java Basics")).thenReturn(Optional.of(courseEntity));
+    void testGetCourseById_NotFound() {
+        when(courseRepository.findById(courseId)).thenReturn(Optional.empty());
 
-        try (MockedStatic<CourseMapper> mockedMapper = mockStatic(CourseMapper.class)) {
-            mockedMapper.when(() -> CourseMapper.toDTO(courseEntity)).thenReturn(courseDTO);
+        assertThrows(CourseNotFoundException.class, () -> courseService.getCourseById(courseId));
 
-            CourseDTO result = courseService.getCourseByTitle("Java Basics");
-
-            assertNotNull(result);
-            assertEquals("Java Basics", result.getTitle());
-            verify(courseRepository, times(1)).findByTitle("Java Basics");
-            mockedMapper.verify(() -> CourseMapper.toDTO(courseEntity), times(1));
-        }
+        verify(courseRepository, times(1)).findById(courseId);
     }
 
     @Test
-    void shouldThrowExceptionIfCourseNotFoundByTitle() {
-        when(courseRepository.findByTitle("Python Basics")).thenReturn(Optional.empty());
+    void testGetCourseByTitle_Success() {
+        when(courseRepository.findByTitle("Java Programming")).thenReturn(Optional.of(courseEntity));
 
-        assertThrows(CourseNotFoundException.class, () -> courseService.getCourseByTitle("Python Basics"));
-        verify(courseRepository, times(1)).findByTitle("Python Basics");
+        CourseDTO result = courseService.getCourseByTitle("Java Programming");
+
+        assertNotNull(result);
+        assertEquals("Java Programming", result.getTitle());
+        verify(courseRepository, times(1)).findByTitle("Java Programming");
     }
 
     @Test
-    void shouldSaveNewCourse() {
-        when(courseRepository.existsByTitle("Java Basics")).thenReturn(false);
+    void testGetCourseByTitle_NotFound() {
+        when(courseRepository.findByTitle("Python Programming")).thenReturn(Optional.empty());
+
+        assertThrows(CourseNotFoundException.class, () -> courseService.getCourseByTitle("Python Programming"));
+
+        verify(courseRepository, times(1)).findByTitle("Python Programming");
+    }
+
+    @Test
+    void testSaveCourse_Success() {
+        when(courseRepository.existsByTitle(courseDTO.getTitle())).thenReturn(false);
         when(courseRepository.save(any(CourseEntity.class))).thenReturn(courseEntity);
 
-        try (MockedStatic<CourseMapper> mockedMapper = mockStatic(CourseMapper.class)) {
-            mockedMapper.when(() -> CourseMapper.toEntity(courseDTO)).thenReturn(courseEntity);
-            mockedMapper.when(() -> CourseMapper.toDTO(courseEntity)).thenReturn(courseDTO);
+        CourseDTO savedCourse = courseService.saveCourse(courseDTO);
 
-            CourseDTO savedCourse = courseService.saveCourse(courseDTO);
-
-            assertNotNull(savedCourse);
-            assertEquals("Java Basics", savedCourse.getTitle());
-            verify(courseRepository, times(1)).existsByTitle("Java Basics");
-            verify(courseRepository, times(1)).save(any(CourseEntity.class));
-            mockedMapper.verify(() -> CourseMapper.toEntity(courseDTO), times(1));
-            mockedMapper.verify(() -> CourseMapper.toDTO(courseEntity), times(1));
-        }
+        assertNotNull(savedCourse);
+        assertEquals(courseDTO.getTitle(), savedCourse.getTitle());
+        verify(courseRepository, times(1)).save(any(CourseEntity.class));
     }
 
     @Test
-    void shouldThrowExceptionIfCourseAlreadyExists() {
-        when(courseRepository.existsByTitle("Java Basics")).thenReturn(true);
+    void testSaveCourse_AlreadyExists() {
+        when(courseRepository.existsByTitle(courseDTO.getTitle())).thenReturn(true);
 
         assertThrows(CourseAlreadyExistsException.class, () -> courseService.saveCourse(courseDTO));
-        verify(courseRepository, times(1)).existsByTitle("Java Basics");
+
+        verify(courseRepository, never()).save(any(CourseEntity.class));
+    }
+
+    @Test
+    void testUploadCourseImage_Success() throws IOException {
+        MultipartFile mockFile = mock(MultipartFile.class);
+        lenient().when(courseRepository.findById(courseId)).thenReturn(Optional.of(courseEntity));
+        when(fileStorageService.saveFile(mockFile, courseId)).thenReturn("path/to/new/image.jpg");
+
+        String filePath = courseService.uploadCourseImage(courseId, mockFile);
+
+        assertEquals("path/to/new/image.jpg", filePath);
+        verify(fileStorageService, times(1)).saveFile(mockFile, courseId);
+        verify(courseRepository, times(1)).save(courseEntity);
+    }
+
+    @Test
+    void testUploadCourseImage_IOException() throws IOException {
+        UUID courseId = UUID.randomUUID();
+        MultipartFile mockFile = mock(MultipartFile.class);
+        CourseEntity mockCourse = new CourseEntity();
+        mockCourse.setCourseId(courseId);
+
+        when(courseRepository.findById(courseId)).thenReturn(Optional.of(mockCourse));
+        when(fileStorageService.saveFile(any(), any())).thenThrow(new IOException("File upload failed"));
+
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> courseService.uploadCourseImage(courseId, mockFile));
+
+        assertEquals("Failed to upload image for course ID " + courseId, exception.getMessage());
+
+        verify(courseRepository, never()).save(any());
+    }
+
+
+    @Test
+    void testUploadCourseImage_FileUploadFails() throws IOException {
+        MultipartFile mockFile = mock(MultipartFile.class);
+        when(courseRepository.findById(courseId)).thenReturn(Optional.of(courseEntity));
+        when(fileStorageService.saveFile(mockFile, courseId)).thenThrow(new IOException("Upload failed"));
+
+        assertThrows(RuntimeException.class, () -> courseService.uploadCourseImage(courseId, mockFile));
+
+        verify(fileStorageService, times(1)).saveFile(mockFile, courseId);
         verify(courseRepository, never()).save(any());
     }
 
     @Test
-    void shouldDeleteCourseById() {
+    void testUpdateCourse_Success() {
+        lenient().when(courseRepository.findById(courseId)).thenReturn(Optional.of(courseEntity));
+        lenient().when(courseRepository.existsByTitle(courseDTO.getTitle())).thenReturn(false);
+        lenient().when(courseRepository.save(any(CourseEntity.class))).thenReturn(courseEntity);
+
+        CourseDTO updatedCourse = courseService.updateCourse(courseId, courseDTO);
+
+        assertNotNull(updatedCourse);
+        assertEquals(courseDTO.getTitle(), updatedCourse.getTitle());
+        verify(courseRepository, times(1)).save(courseEntity);
+    }
+
+    @Test
+    void testUpdateCourse_CourseNotFound() {
+        when(courseRepository.findById(courseId)).thenReturn(Optional.empty());
+
+        assertThrows(CourseNotFoundException.class, () -> courseService.updateCourse(courseId, courseDTO));
+
+        verify(courseRepository, never()).save(any());
+    }
+
+    @Test
+    void testUpdateCourse_TitleAlreadyExists() {
+        UUID existingCourseId = UUID.randomUUID();
+        UUID instructorId = UUID.randomUUID();
+        BigDecimal coursePrice = new BigDecimal("100.0");
+        String courseImage = "default_image.png";
+
+        CourseDTO courseDTO = new CourseDTO(existingCourseId, "Java Programming", "Learn Java from scratch", instructorId, coursePrice, courseImage);
+
+        CourseEntity existingCourse = new CourseEntity();
+        existingCourse.setCourseId(existingCourseId);
+        existingCourse.setTitle("Java Programming");
+
+        CourseEntity duplicateCourse = new CourseEntity();
+        duplicateCourse.setCourseId(UUID.randomUUID());
+        duplicateCourse.setTitle("Java Programming");
+
+        when(courseRepository.findById(existingCourseId)).thenReturn(Optional.of(existingCourse));
+        when(courseRepository.findByTitle(courseDTO.getTitle())).thenReturn(Optional.of(duplicateCourse));
+
+        assertThrows(CourseAlreadyExistsException.class, () -> courseService.updateCourse(existingCourseId, courseDTO));
+
+        verify(courseRepository, never()).save(any());
+    }
+
+
+
+    @Test
+    void testDeleteCourse_Success() {
         when(courseRepository.findById(courseId)).thenReturn(Optional.of(courseEntity));
 
         courseService.deleteCourse(courseId);
@@ -144,10 +231,11 @@ class CourseServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionIfDeletingNonExistentCourse() {
+    void testDeleteCourse_NotFound() {
         when(courseRepository.findById(courseId)).thenReturn(Optional.empty());
 
         assertThrows(CourseNotFoundException.class, () -> courseService.deleteCourse(courseId));
+
         verify(courseRepository, never()).delete(any());
     }
 }

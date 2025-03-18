@@ -1,15 +1,17 @@
 package com.example.lms.users;
 
+import java.io.IOException;
 import com.example.lms.exceptions.ErrorResponse;
+import com.example.lms.utils.FileStorageService;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,11 +21,15 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FileStorageService fileStorageService; // Ensure this is declared
 
 
-    public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
+
+    public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder,
+                       FileStorageService fileStorageService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.fileStorageService = fileStorageService;
     }
 
     public List<UserDTO> getAllUsers() {
@@ -68,6 +74,60 @@ public class UserService implements UserDetailsService {
         UserEntity savedUser = userRepository.save(user);
 
         return UserMapper.toDTO(savedUser);
+    }
+
+    @Transactional
+    public UserDTO updateUserProfile(UUID userId, UserDTO updatedUser) {
+        Optional<UserEntity> optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("User not found.");
+        }
+
+        UserEntity user = optionalUser.get();
+
+        // Update user details
+        user.setFirstName(updatedUser.getFirstName());
+        user.setLastName(updatedUser.getLastName());
+        user.setEmail(updatedUser.getEmail());
+        user.setProfileBio(updatedUser.getProfileBio());
+
+        if (updatedUser.getGender() != null) {
+            user.setGender(updatedUser.getGender());
+        }
+
+        user.setPhoneNumber(updatedUser.getPhoneNumber());
+
+        if (updatedUser.getDateOfBirth() != null) {
+            user.setDateOfBirth(updatedUser.getDateOfBirth());
+        }
+
+        user.setProfileImageUrl(updatedUser.getProfileImageUrl());
+
+        // Save updated user
+        userRepository.save(user);
+
+        return UserMapper.toDTO(user);
+    }
+
+    public UserDTO uploadProfileImage(UUID userId, MultipartFile file) throws IOException {
+        Optional<UserEntity> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        UserEntity user = userOpt.get();
+        String imageUrl = fileStorageService.saveFile(file, userId);
+        user.setProfileImageUrl(imageUrl);
+        userRepository.save(user);
+
+        return UserMapper.toDTO(user);
+    }
+
+    public String getProfileImageUrl(UUID userId) {
+        return userRepository.findById(userId)
+                .map(UserEntity::getProfileImageUrl)
+                .orElse(null);
     }
 
 

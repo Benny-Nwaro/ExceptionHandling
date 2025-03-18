@@ -7,6 +7,9 @@
 /Users/test/FlywayMigration/src/main/java/com/example/lms/assignments/AssignmentService.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/auth/AuthController.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/auth/LoginRequest.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/chat/ChatController.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/chat/ChatMessage.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/chat/Type.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/courses/CourseController.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/courses/CourseDTO.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/courses/CourseEntity.java
@@ -56,3 +59,4 @@
 /Users/test/FlywayMigration/src/main/java/com/example/lms/users/UserRepository.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/users/UserService.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/utils/ApiResponse.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/utils/FileStorageService.java

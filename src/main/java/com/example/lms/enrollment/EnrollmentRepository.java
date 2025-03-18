@@ -16,11 +16,14 @@ public interface EnrollmentRepository extends JpaRepository<EnrollmentEntity, UU
     List<EnrollmentEntity> findByStudentId(UUID studentId);
 
     Optional<EnrollmentEntity> findByStudentAndCourse(UserEntity student, CourseEntity course);
-
+    @Query("SELECT COUNT(e) > 0 FROM EnrollmentEntity e WHERE e.student.id = :studentId AND e.course.id = :courseId")
+    boolean isStudentEnrolled(@Param("studentId") UUID studentId, @Param("courseId") UUID courseId);
     @Query("SELECT e.student FROM EnrollmentEntity e WHERE e.course.id = :courseId")
     List<UserEntity> findUsersByCourseId(@Param("courseId") UUID courseId);
 
     @Query("SELECT e.student FROM EnrollmentEntity e WHERE e.course.instructorId = :instructorId")
     List<UserEntity> findStudentsByInstructorId(@Param("instructorId") UUID instructorId);
+
+
 }
 

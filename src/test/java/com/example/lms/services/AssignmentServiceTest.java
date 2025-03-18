@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,7 +46,7 @@ class AssignmentServiceTest {
 
         courseId = UUID.randomUUID();
         assignmentId = UUID.randomUUID();
-        courseEntity = new CourseEntity(courseId, "Java Basics", "Intro to Java", UUID.randomUUID());
+        courseEntity = new CourseEntity(courseId, "Java Basics", "Intro to Java", UUID.randomUUID(), BigDecimal.ZERO, null);
         assignmentEntity = new AssignmentEntity(assignmentId, "Project 1", "Build a simple app", courseEntity, null);
         assignmentDTO = new AssignmentDTO(assignmentId, "Project 1", "Build a simple app", courseId, null);
     }

@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -43,7 +44,8 @@ class CourseControllerTest {
     @BeforeEach
     void setUp() {
         courseId = UUID.randomUUID();
-        courseDTO = new CourseDTO(courseId, "Java Basics", "Introduction to Java", UUID.randomUUID());
+        courseDTO = new CourseDTO(courseId, "Java Basics", "Introduction to Java",
+                UUID.randomUUID(), new BigDecimal("99.99"), "course-image-url.jpg");
     }
 
     @Test
@@ -82,7 +84,9 @@ class CourseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(courseDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.title").value("Java Basics"));
+                .andExpect(jsonPath("$.title").value("Java Basics"))
+                .andExpect(jsonPath("$.coursePrice").value(99.99))
+                .andExpect(jsonPath("$.courseImage").value("course-image-url.jpg"));
     }
 
     @Test

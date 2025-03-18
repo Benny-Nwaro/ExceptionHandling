@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +43,7 @@ class LessonServiceTest {
         lessonId = UUID.randomUUID();
         courseId = UUID.randomUUID();
 
-        course = new CourseEntity(courseId, "Spring Boot", "Spring Boot Basics", UUID.randomUUID());
+        course = new CourseEntity(courseId, "Java Basics", "Intro to Java", UUID.randomUUID(), BigDecimal.ZERO, null);
         lesson = new LessonEntity(lessonId, course, "Introduction", "Lesson description", "http://video.url");
 
         lessonDTO = new LessonDTO(lessonId, courseId, "Introduction", "Lesson description", "http://video.url");

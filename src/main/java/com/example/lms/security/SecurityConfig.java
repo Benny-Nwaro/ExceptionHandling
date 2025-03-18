@@ -13,8 +13,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -40,8 +45,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configure(http)) // Enable CORS
+                .csrf(csrf -> csrf.disable()) // 🔥 Completely disable CSRF since JWT is stateless
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ Ensure CORS is set
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/register",
@@ -50,26 +55,37 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs.yaml",
-                                "/favicon.ico")
-                        .permitAll()
+                                "/favicon.ico",
+                                "/uploads/**",
+                                "/ws/**" // ✅ WebSockets are still permitted
+                        ).permitAll()
                         .requestMatchers(
                                 "/api/v1/users/**",
                                 "/api/v1/courses/**",
                                 "/api/v1/lessons/**",
                                 "/api/v1/enrollments/**",
                                 "/api/v1/assignments/**",
-                                "/api/v1/submissions/**")
-                        .hasAnyRole(
-                                "INSTRUCTOR",
-                                "ADMIN", "STUDENT")
-                        .anyRequest()
-                        .authenticated()
+                                "/api/v1/submissions/**"
+                        ).hasAnyRole("INSTRUCTOR", "ADMIN", "STUDENT")
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:3000", "http://127.0.0.1:3000")); // ✅ Allow frontend
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -90,14 +106,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    public WebMvcConfigurer resourceConfigurer() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*");
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                registry.addResourceHandler("/uploads/**")
+                        .addResourceLocations("file:uploads/");
             }
         };
     }

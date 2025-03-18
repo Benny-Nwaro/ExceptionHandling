@@ -12,6 +12,7 @@ import java.util.UUID;
 @Repository
 public interface LessonRepository extends JpaRepository<LessonEntity, UUID> {
     List<LessonEntity> findByCourse_CourseId(UUID courseId);
+    List<LessonEntity> findByCourse(CourseEntity course);
     Optional<LessonEntity> findByCourseAndTitle(CourseEntity course, String title);
 
 }

@@ -32,21 +32,21 @@ class UserControllerTest {
     private UserController userController;
 
     private UUID userId;
-    private UserDTO userEntity;
+    private UserDTO userDTO;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
         userId = UUID.randomUUID();
-        userEntity = new UserDTO(userId, "Aroh", "Ebenezer", "aroh@aroh.com", Role.ADMIN.name(),
-                "Software Engineer", Gender.MALE.name(),
-                "1234567890", new Date().toString(), "password");
+        userDTO = new UserDTO(userId, "Aroh", "Ebenezer", "aroh@aroh.com",
+                Role.ADMIN.name(), "Software Engineer",
+                Gender.MALE, "1234567890", new Date(), "password");
     }
 
     @Test
     void getAllUsers_ShouldReturnListOfUsers() throws Exception {
-        List<UserDTO> users = List.of(userEntity);
+        List<UserDTO> users = List.of(userDTO);
         when(userService.getAllUsers()).thenReturn(users);
 
         mockMvc.perform(get("/api/v1/users"))
@@ -55,28 +55,32 @@ class UserControllerTest {
                 .andExpect(jsonPath("$[0].id").value(userId.toString()))
                 .andExpect(jsonPath("$[0].firstName").value("Aroh"))
                 .andExpect(jsonPath("$[0].lastName").value("Ebenezer"))
-                .andExpect(jsonPath("$[0].email").value("aroh@aroh.com"));
+                .andExpect(jsonPath("$[0].email").value("aroh@aroh.com"))
+                .andExpect(jsonPath("$[0].role").value(Role.ADMIN.name()))
+                .andExpect(jsonPath("$[0].phoneNumber").value("1234567890"));
 
         verify(userService, times(1)).getAllUsers();
     }
 
     @Test
     void getUserById_ShouldReturnUser() throws Exception {
-        when(userService.getUserById(userId)).thenReturn(userEntity);
+        when(userService.getUserById(userId)).thenReturn(userDTO);
 
         mockMvc.perform(get("/api/v1/users/{id}", userId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(userId.toString()))
                 .andExpect(jsonPath("$.firstName").value("Aroh"))
                 .andExpect(jsonPath("$.lastName").value("Ebenezer"))
-                .andExpect(jsonPath("$.email").value("aroh@aroh.com"));
+                .andExpect(jsonPath("$.email").value("aroh@aroh.com"))
+                .andExpect(jsonPath("$.role").value(Role.ADMIN.name()))
+                .andExpect(jsonPath("$.phoneNumber").value("1234567890"));
 
         verify(userService, times(1)).getUserById(userId);
     }
 
     @Test
     void getUserByEmail_ShouldReturnUser() throws Exception {
-        when(userService.getUserByEmail("aroh@aroh.com")).thenReturn(userEntity);
+        when(userService.getUserByEmail("aroh@aroh.com")).thenReturn(userDTO);
 
         mockMvc.perform(get("/api/v1/users/by-email")
                         .param("email", "aroh@aroh.com"))
@@ -84,7 +88,9 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id").value(userId.toString()))
                 .andExpect(jsonPath("$.firstName").value("Aroh"))
                 .andExpect(jsonPath("$.lastName").value("Ebenezer"))
-                .andExpect(jsonPath("$.email").value("aroh@aroh.com"));
+                .andExpect(jsonPath("$.email").value("aroh@aroh.com"))
+                .andExpect(jsonPath("$.role").value(Role.ADMIN.name()))
+                .andExpect(jsonPath("$.phoneNumber").value("1234567890"));
 
         verify(userService, times(1)).getUserByEmail("aroh@aroh.com");
     }

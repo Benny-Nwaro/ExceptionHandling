@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +43,22 @@ public class CourseController {
     @PostMapping
     public ResponseEntity<CourseDTO> createCourse(@RequestBody @Valid CourseDTO courseDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(courseService.saveCourse(courseDTO));
+    }
+
+    @PostMapping("/{id}/upload-image")
+    public ResponseEntity<String> uploadCourseImage(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
+        try {
+            String imageUrl = courseService.uploadCourseImage(id, file);
+            return ResponseEntity.ok(imageUrl);
+        } catch (RuntimeException e) { // Now handles all failures
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
+        }
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CourseDTO> updateCourse(@PathVariable UUID id, @RequestBody @Valid CourseDTO courseDTO) {
+        return ResponseEntity.ok(courseService.updateCourse(id, courseDTO));
     }
 
     @DeleteMapping("/{id}")

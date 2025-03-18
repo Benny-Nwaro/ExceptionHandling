@@ -28,6 +28,11 @@ public class LessonController {
         return ResponseEntity.ok(lessonService.getLessonById(id));
     }
 
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<List<LessonDTO>> getLessonsByCourseId(@PathVariable UUID courseId) {
+        return ResponseEntity.ok(lessonService.getLessonsByCourseId(courseId));
+    }
+
     @PostMapping
     public ResponseEntity<LessonDTO> createLesson(@RequestBody @Valid LessonDTO lesson) {
         LessonDTO createdLesson = lessonService.createLesson(lesson);

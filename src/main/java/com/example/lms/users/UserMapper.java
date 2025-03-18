@@ -9,9 +9,10 @@ public class UserMapper {
                 user.getEmail(),
                 user.getRole().toString(),
                 user.getProfileBio(),
-                user.getGender().name(),
+                user.getGender(),
                 user.getPhoneNumber(),
-                user.getDateOfBirth().toString(),
+                user.getDateOfBirth(),
+                user.getProfileImageUrl(),
                 user.getPassword()
         );
     }

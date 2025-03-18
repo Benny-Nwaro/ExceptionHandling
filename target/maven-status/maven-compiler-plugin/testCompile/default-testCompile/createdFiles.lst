@@ -1,13 +1,2 @@
-com/example/lms/controllers/SubmissionControllerTest.class
-com/example/lms/services/UserServiceTest.class
-com/example/lms/services/EnrollmentServiceTest.class
 com/example/lms/HibernateLmsApplicationTests.class
-com/example/lms/services/AssignmentServiceTest.class
-com/example/lms/controllers/CourseControllerTest.class
 com/example/lms/controllers/AssignmentControllerTest.class
-com/example/lms/services/SubmissionServiceTest.class
-com/example/lms/controllers/UserControllerTest.class
-com/example/lms/services/LessonServiceTest.class
-com/example/lms/services/CourseServiceTest.class
-com/example/lms/controllers/LessonControllerTest.class
-com/example/lms/controllers/EnrollmentControllerTest.class

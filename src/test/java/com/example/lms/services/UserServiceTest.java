@@ -2,6 +2,7 @@ package com.example.lms.services;
 
 import com.example.lms.exceptions.ErrorResponse;
 import com.example.lms.users.*;
+import com.example.lms.utils.FileStorageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +11,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +30,10 @@ class UserServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private FileStorageService fileStorageService;
+
 
     @InjectMocks
     private UserService userService;
@@ -177,5 +184,99 @@ class UserServiceTest {
 
         verify(userRepository, times(1)).findByEmail(user.getEmail());
     }
+
+    @Test
+    void shouldUpdateUserProfileWhenUserExists() {
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.save(any(UserEntity.class))).thenReturn(user);
+
+        UserDTO updatedUserDTO = new UserDTO();
+        updatedUserDTO.setFirstName("UpdatedName");
+        updatedUserDTO.setLastName("UpdatedLast");
+        updatedUserDTO.setEmail("updated@example.com");
+        updatedUserDTO.setProfileBio("Updated bio");
+        updatedUserDTO.setPhoneNumber("1234567890");
+
+        UserDTO result = userService.updateUserProfile(userId, updatedUserDTO);
+
+        assertNotNull(result);
+        assertEquals("UpdatedName", result.getFirstName());
+        assertEquals("updated@example.com", result.getEmail());
+        assertEquals("Updated bio", result.getProfileBio());
+
+        verify(userRepository, times(1)).findById(userId);
+        verify(userRepository, times(1)).save(any(UserEntity.class));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentUser() {
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        UserDTO updatedUserDTO = new UserDTO();
+        updatedUserDTO.setFirstName("UpdatedName");
+
+        assertThrows(RuntimeException.class, () -> userService.updateUserProfile(userId, updatedUserDTO));
+
+        verify(userRepository, times(1)).findById(userId);
+        verify(userRepository, never()).save(any(UserEntity.class));
+    }
+
+    @Test
+    void shouldUploadProfileImageWhenUserExists() throws IOException {
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(fileStorageService.saveFile(any(MultipartFile.class), any(UUID.class)))
+                .thenReturn("http://image-url.com/image.jpg");
+        when(userRepository.save(any(UserEntity.class))).thenReturn(user);
+
+        MultipartFile file = mock(MultipartFile.class);
+        UserDTO result = userService.uploadProfileImage(userId, file);
+
+        assertNotNull(result);
+        assertEquals("http://image-url.com/image.jpg", result.getProfileImageUrl());
+
+        verify(fileStorageService, times(1)).saveFile(file, userId);
+        verify(userRepository, times(1)).save(any(UserEntity.class));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUploadingProfileImageForNonExistentUser() throws IOException {
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        MultipartFile file = mock(MultipartFile.class);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> userService.uploadProfileImage(userId, file));
+
+        assertEquals("User not found", exception.getMessage());
+
+        verify(fileStorageService, never()).saveFile(any(MultipartFile.class), any(UUID.class));
+
+        verify(userRepository, never()).save(any(UserEntity.class));
+    }
+
+    @Test
+    void shouldReturnProfileImageUrlWhenUserExists() {
+        user.setProfileImageUrl("http://image-url.com/image.jpg");
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        String imageUrl = userService.getProfileImageUrl(userId);
+
+        assertNotNull(imageUrl);
+        assertEquals("http://image-url.com/image.jpg", imageUrl);
+
+        verify(userRepository, times(1)).findById(userId);
+    }
+
+    @Test
+    void shouldReturnNullWhenProfileImageNotFound() {
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        String imageUrl = userService.getProfileImageUrl(userId);
+
+        assertNull(imageUrl);
+
+        verify(userRepository, times(1)).findById(userId);
+    }
+
 }
 

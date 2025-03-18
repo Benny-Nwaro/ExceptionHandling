@@ -8,14 +8,17 @@ com/example/lms/submissions/SubmissionRepository.class
 com/example/lms/lessons/LessonEntity.class
 com/example/lms/exceptions/DuplicateAssignmentException.class
 com/example/lms/submissions/SubmissionEntity.class
+com/example/lms/chat/ChatMessage.class
 com/example/lms/users/Role.class
 com/example/lms/courses/CourseService.class
 com/example/lms/exceptions/ResourceNotFoundException.class
 com/example/lms/assignments/AssignmentMapper.class
 com/example/lms/submissions/SubmissionService.class
 com/example/lms/exceptions/DuplicateSubmissionException.class
+com/example/lms/utils/FileStorageService.class
 com/example/lms/exceptions/ErrorResponse.class
 com/example/lms/users/UserRepository.class
+com/example/lms/chat/Type.class
 com/example/lms/assignments/AssignmentController.class
 com/example/lms/exceptions/GlobalExceptionHandler.class
 com/example/lms/lessons/LessonService.class
@@ -41,6 +44,7 @@ com/example/lms/HibernateLmsApplication.class
 com/example/lms/exceptions/CourseAlreadyExistsException.class
 com/example/lms/exceptions/ErrorResponse$NoSuchUserExistsException.class
 com/example/lms/exceptions/LessonNotFoundException.class
+com/example/lms/chat/ChatController.class
 com/example/lms/courses/CourseEntity.class
 com/example/lms/security/SecurityConfig$1.class
 com/example/lms/lessons/LessonDTO.class

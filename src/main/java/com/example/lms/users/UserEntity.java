@@ -54,6 +54,9 @@ public class UserEntity implements UserDetails {
     @Column(name = "profile_bio", columnDefinition = "TEXT")
     private String profileBio;
 
+    @Column(name = "profile_image_url", length = 500)
+    private String profileImageUrl;
+
     @Version
     @Column(name = "version")
     private Long version;
@@ -195,6 +198,14 @@ public class UserEntity implements UserDetails {
 
     public Role getRole() {
         return role;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     public Long getVersion() {

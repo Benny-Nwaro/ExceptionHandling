@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -61,14 +62,16 @@ class EnrollmentServiceTest {
                 "john@example.com",
                 "password123",
                 "+1234567890",
-                new Date(),  // Date of birth
-                Role.STUDENT, // Assuming Role is an enum
-                Gender.MALE, // Assuming Gender is an enum
+                new Date(),
+                Role.STUDENT,
+                Gender.MALE,
                 "Aspiring software engineer",
                 25
         );
 
-        course = new CourseEntity(courseId, "Spring Boot", "Spring Boot Basics", UUID.randomUUID());
+        course = new CourseEntity(courseId, "Java Basics", "Intro to Java", UUID.randomUUID(),
+                BigDecimal.ZERO, null);
+
 
         enrollmentEntity = new EnrollmentEntity(enrollmentId, student, course);
     }

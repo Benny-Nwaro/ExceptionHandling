@@ -52,6 +52,17 @@ public class LessonService {
         return LessonMapper.toDTO(lessonRepository.save(lesson));
     }
 
+    public List<LessonDTO> getLessonsByCourseId(UUID courseId) {
+        CourseEntity course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException("Course not found with ID: " + courseId));
+
+        return lessonRepository.findByCourse(course)
+                .stream()
+                .map(LessonMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+
 
     public void deleteLesson(UUID id) {
         LessonEntity lesson = lessonRepository.findById(id)
