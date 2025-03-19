@@ -45,8 +45,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // 🔥 Completely disable CSRF since JWT is stateless
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ Ensure CORS is set
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/register",
@@ -57,7 +57,7 @@ public class SecurityConfig {
                                 "/v3/api-docs.yaml",
                                 "/favicon.ico",
                                 "/uploads/**",
-                                "/ws/**" // ✅ WebSockets are still permitted
+                                "/ws/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/api/v1/users/**",
@@ -77,7 +77,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000", "http://127.0.0.1:3000")); // ✅ Allow frontend
+        config.setAllowedOrigins(List.of("http://localhost:3000", "http://127.0.0.1:3000", "http://172.20.10.3:3000"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
