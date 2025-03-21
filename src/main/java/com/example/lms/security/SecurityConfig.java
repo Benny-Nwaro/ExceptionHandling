@@ -57,7 +57,9 @@ public class SecurityConfig {
                                 "/v3/api-docs.yaml",
                                 "/favicon.ico",
                                 "/uploads/**",
-                                "/ws/**"
+                                "/ws/**",
+                                "/ws"
+
                         ).permitAll()
                         .requestMatchers(
                                 "/api/v1/users/**",
