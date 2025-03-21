@@ -1,0 +1,6 @@
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'courses' AND column_name = 'teacher_id') THEN
+        ALTER TABLE courses DROP COLUMN teacher_id;
+    END IF;
+END $$;

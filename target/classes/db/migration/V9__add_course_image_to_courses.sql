@@ -1,0 +1,3 @@
+
+ALTER TABLE courses
+ADD COLUMN courseImage VARCHAR(255) NULL;
