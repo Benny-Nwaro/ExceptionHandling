@@ -1,0 +1,6 @@
+---- Step 1: Drop foreign key constraints referencing user_id
+--ALTER TABLE enrollments DROP CONSTRAINT IF EXISTS fk_student;
+--ALTER TABLE submissions DROP CONSTRAINT IF EXISTS fk_submission_student;
+--
+---- Step 2: Drop the user_id column if it exists
+--ALTER TABLE users DROP COLUMN IF EXISTS user_id CASCADE;
