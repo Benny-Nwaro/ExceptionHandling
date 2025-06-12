@@ -6,7 +6,13 @@
 /Users/test/FlywayMigration/src/main/java/com/example/lms/assignments/AssignmentRepository.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/assignments/AssignmentService.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/auth/AuthController.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/auth/AuthResponse.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/auth/CustomOAuth2UserService.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/auth/LoginRequest.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/auth/LoginRequestDTO.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/auth/OAuth2AuthController.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/auth/OAuth2LoginSuccessHandler.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/auth/RegistrationRequestDTO.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/chat/ChatController.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/chat/ChatMessage.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/chat/Type.java
@@ -44,8 +50,11 @@
 /Users/test/FlywayMigration/src/main/java/com/example/lms/payment/PaymentController.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/payment/PaymentRequest.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/payment/PaymentService.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/security/CloudinaryConfig.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/security/CloudinaryService.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/security/JwtAuthenticationFilter.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/security/JwtUtil.java
+/Users/test/FlywayMigration/src/main/java/com/example/lms/security/MvcConfig.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/security/OpenApiConfig.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/security/SecurityConfig.java
 /Users/test/FlywayMigration/src/main/java/com/example/lms/socialMedia/SocialMediaProfileController.java
